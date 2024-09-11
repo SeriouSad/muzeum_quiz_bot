@@ -40,7 +40,6 @@ def send_answer(question, message, correct):
 
 
 def send_question(user, message):
-    result = process_progress(user)
     if process_progress(user):
         bot.send_message(message.chat.id, f"Вы успешно завершили этот тест, у вас сейчас {user.points}⭐️")
         if process_finish(user):
