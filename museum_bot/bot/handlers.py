@@ -12,7 +12,7 @@ from museum_bot.bot.states import *
 
 def process_progress(user):
     test_progression = UserMuseumProgression.objects.get(user=user, finished=False)
-    if test_progression.questions_count == 2:
+    if test_progression.questions_count == 15:
         test_progression.finished = True
         test_progression.save()
         return True
