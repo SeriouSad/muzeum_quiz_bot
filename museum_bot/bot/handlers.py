@@ -101,6 +101,15 @@ def func(message: types.Message):
     bot.set_state(message.from_user.id, RegistrationStates.email, message.chat.id)
 
 
+@bot.message_handler(state=RegistrationStates.phone)
+def func(message: types.Message):
+    user = TgUser.objects.get(tg_id=message.from_user.id)
+    user.phone_number = message.text[:254]
+    user.save()
+    bot.send_message(message.chat.id, "Введите свой email")
+    bot.set_state(message.from_user.id, RegistrationStates.email, message.chat.id)
+
+
 @bot.message_handler(state=RegistrationStates.email)
 def func(message: types.Message):
     user = TgUser.objects.get(tg_id=message.from_user.id)
