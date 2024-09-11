@@ -22,20 +22,25 @@ def process_progress(user):
     return False
 
 def send_answer(question, message, correct):
+    if question.order == 15:
+        kb = res_kb
+    else:
+        kb = next_kb
     if question.answer_description.photo:
         if correct:
-            bot.send_photo(message.chat.id, question.answer_description.photo, caption=question.answer_description.text_correct, reply_markup=next_kb)
+            bot.send_photo(message.chat.id, question.answer_description.photo, caption=question.answer_description.text_correct, reply_markup=kb)
         else:
             bot.send_photo(message.chat.id, question.answer_description.photo,
-                           caption=question.answer_description.text, reply_markup=next_kb)
+                           caption=question.answer_description.text, reply_markup=kb)
     else:
         if correct:
-            bot.send_message(message.chat.id, question.answer_description.text_correct, reply_markup=next_kb)
+            bot.send_message(message.chat.id, question.answer_description.text_correct, reply_markup=kb)
         else:
-            bot.send_message(message.chat.id, question.answer_description.text, reply_markup=next_kb)
+            bot.send_message(message.chat.id, question.answer_description.text, reply_markup=kb)
 
 
 def send_question(user, message):
+    result = process_progress(user)
     if process_progress(user):
         bot.send_message(message.chat.id, f"Вы успешно завершили этот тест, у вас сейчас {user.points}⭐️")
         if process_finish(user):
@@ -50,6 +55,7 @@ def send_question(user, message):
     kb = InlineKeyboardMarkup()
     for i in answers:
         kb.add(InlineKeyboardButton(str(i.text), callback_data=i.id))
+
     if question.photo:
         bot.send_photo(message.chat.id, question.photo, caption=question.text, reply_markup=kb)
     else:
@@ -123,7 +129,7 @@ def func(message: types.Message):
 def func(call: types.CallbackQuery):
     bot.answer_callback_query(call.id)
     bot.send_message(call.message.chat.id,
-                     "*Поздравляем!* 🎉 Теперь ты можешь следить за своими успехами в личном кабинете.\n\nА прямо сейчас ты можешь *ознакомиться с нашими правилами*.", reply_markup=rule_kb)
+                     "*Поздравляем!* 🎉 Теперь ты можешь следить за своими успехами в личном кабинете.\n\nА прямо сейчас ты можешь *ознакомиться с нашими правилами*.", reply_markup=rule_kb, parse_mode="Markdown")
     bot.set_state(call.from_user.id, RegistrationStates.rules, call.message.chat.id)
 
 

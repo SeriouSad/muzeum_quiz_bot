@@ -26,3 +26,7 @@ sp_game_kb.add(InlineKeyboardButton("В игре", callback_data="sp"))
 
 rule_kb = InlineKeyboardMarkup()
 rule_kb.add(InlineKeyboardButton("Посмотреть правила", callback_data="rules"))
+
+
+res_kb = InlineKeyboardMarkup()
+res_kb.add(InlineKeyboardButton("Посмотреть результат", callback_data="rules"))
