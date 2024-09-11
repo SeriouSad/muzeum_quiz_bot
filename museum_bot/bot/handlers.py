@@ -124,7 +124,7 @@ def func(message: types.Message):
 def func(call: types.CallbackQuery):
     bot.answer_callback_query(call.id)
     bot.send_message(call.message.chat.id,
-                     "Поздравляем! Теперь ты можешь следить за своими успехами в личном кабинете.\n\nА прямо сейчас ты можешь ознакомиться с нашими правилами.")
+                     "Поздравляем! Теперь ты можешь следить за своими успехами в личном кабинете.\n\nА прямо сейчас ты можешь ознакомиться с нашими правилами.\n\nПросто нажми на команды ниже\n⬇️⬇️⬇️\n/rules - Ознакомиться с правилами\n/account - Посмотреть информацию об аккаунте\n/start_quiz - Начать квест")
     bot.delete_state(call.from_user.id, call.message.chat.id)
 
 
@@ -180,14 +180,14 @@ def func(call: types.CallbackQuery):
         progress.hint_used = False
         progress.save()
     elif question.hint and not progress.hint_used:
-        bot.send_message(call.message.chat.id, f"К сожалению ответ неверный, но у меня есть подсказка\n\n{question.hint}")
+        bot.send_message(call.message.chat.id, f"К сожалению, ответ неверный, но у меня есть подсказка\n\n{question.hint}")
         # TODO time.sleep(1)
         progress.hint_used = True
         progress.save()
         send_question(user, call.message)
         return
     else:
-        bot.send_message(call.message.chat.id, "К сожалению ответ неверный")
+        bot.send_message(call.message.chat.id, "К сожалению, ответ неверный, ниже ты можешь увидеть правильный ответ.\n⬇️⬇️⬇️")
         send_answer(question, call.message, False)
         progress.questions_count += 1
         progress.hint_used = False
