@@ -28,12 +28,8 @@ DEBUG = os.getenv('DEBUG') == "True"
 ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = ['https://taro-tg.synapse.global',
                         'http://127.0.0.1:1337',
-                        "https://bot1.kndg.online",
-                        "https://bot2.kndg.online",
-                        "https://bot3.kndg.online",
-                        "https://bot4.kndg.online",
-                        "https://bot5.kndg.online",
-                        "https://bot6.kndg.online",]
+                        "https://mbot.kndg.online",
+                        ]
 
 # Application definition
 
