@@ -23,3 +23,6 @@ for i in museums:
 
 sp_game_kb = InlineKeyboardMarkup()
 sp_game_kb.add(InlineKeyboardButton("В игре", callback_data="sp"))
+
+rule_kb = InlineKeyboardMarkup()
+sp_game_kb.add(InlineKeyboardButton("Посмотреть правила", callback_data="rules"))

@@ -124,7 +124,14 @@ def func(message: types.Message):
 def func(call: types.CallbackQuery):
     bot.answer_callback_query(call.id)
     bot.send_message(call.message.chat.id,
-                     "Поздравляем! Теперь ты можешь следить за своими успехами в личном кабинете.\n\nА прямо сейчас ты можешь ознакомиться с нашими правилами.\n\nПросто нажми на команды ниже\n⬇️⬇️⬇️\n/rules - Ознакомиться с правилами\n/account - Посмотреть информацию об аккаунте\n/start_quiz - Начать квест")
+                     "Поздравляем! Теперь ты можешь следить за своими успехами в личном кабинете.\n\nА прямо сейчас ты можешь ознакомиться с нашими правилами.\n", reply_markup=rule_kb)
+    bot.set_state(call.from_user.id, RegistrationStates.rules, call.message.chat.id)
+
+
+@bot.callback_query_handler(func=lambda call: True, state=RegistrationStates.rules)
+def func(call: types.CallbackQuery):
+    rules = Rules.objects.all().first()
+    bot.send_message(call.message.chat.id, rules.text, parse_mode='HTML')
     bot.delete_state(call.from_user.id, call.message.chat.id)
 
 

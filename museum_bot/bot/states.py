@@ -7,6 +7,7 @@ class RegistrationStates(StatesGroup):
     phone = State()
     email = State()
     confirm = State()
+    rules = State()
 
 
 class StartStates(StatesGroup):
