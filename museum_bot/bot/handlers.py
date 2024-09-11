@@ -66,8 +66,8 @@ def start(message: types.Message):
             tg_id=message.from_user.id,
             username=message.from_user.username,
         )
-    text = "Привет! Это проект «Город Героев Москва».\n\nПри поддержке Комитета общественных связей и молодежной политики города Москвы и Департамента культуры города Москвы.\n\nМы подготовили для тебя серию квестов по историческим музеям столицы. Чтобы принять участие нажми на кнопку «Начать»."
-    bot.send_message(message.chat.id, text, reply_markup=reg_kb)
+    text = "Привет! Это проект *«Город Героев Москва»*. ⭐\n\nПри поддержке *Комитета общественных связей и молодежной политики города Москвы и Департамента культуры города Москвы*.\n\nМы подготовили для тебя серию квестов по историческим музеям столицы. Чтобы принять участие нажми на кнопку «Начать». 👇"
+    bot.send_message(message.chat.id, text, reply_markup=reg_kb, parse_mode="Markdown")
     bot.set_state(message.from_user.id, RegistrationStates.start, message.chat.id)
 
 
@@ -75,8 +75,7 @@ def start(message: types.Message):
 def func(call: types.CallbackQuery):
     # bot.send_message(call.message.chat.id, bot.get_state(call.from_user.id, call.message.chat.id))
     bot.answer_callback_query(call.id)
-    bot.send_message(call.message.chat.id, "Отлично! Всего пара действий и ты в игре. Для начала тебе нужно "
-                                           "зарегистрироваться.\nНапиши в чате ФИО")
+    bot.send_message(call.message.chat.id, "Отлично! Всего пара действий и ты в игре. Для начала тебе *нужно зарегистрироваться*❗️\nНапиши в чате ФИО👇", parse_mode="Markdown")
     bot.set_state(call.from_user.id, RegistrationStates.fio, call.message.chat.id)
 
 
@@ -88,7 +87,7 @@ def func(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
     reg_button = types.KeyboardButton(text="Поделиться контактом", request_contact=True)
     keyboard.add(reg_button)
-    bot.send_message(message.chat.id, "Отправьте свой номер телефона", reply_markup=keyboard)
+    bot.send_message(message.chat.id, "Отправьте свой *номер телефона*", reply_markup=keyboard, parse_mode="Markdown")
     bot.set_state(message.from_user.id, RegistrationStates.phone, message.chat.id)
 
 
@@ -97,7 +96,7 @@ def func(message: types.Message):
     user = TgUser.objects.get(tg_id=message.from_user.id)
     user.phone_number = message.contact.phone_number
     user.save()
-    bot.send_message(message.chat.id, "Введите свой email")
+    bot.send_message(message.chat.id, "Введите свой *email*", parse_mode="Markdown")
     bot.set_state(message.from_user.id, RegistrationStates.email, message.chat.id)
 
 
@@ -106,7 +105,7 @@ def func(message: types.Message):
     user = TgUser.objects.get(tg_id=message.from_user.id)
     user.phone_number = message.text[:254]
     user.save()
-    bot.send_message(message.chat.id, "Введите свой email")
+    bot.send_message(message.chat.id, "Введите свой *email*", parse_mode="Markdown")
     bot.set_state(message.from_user.id, RegistrationStates.email, message.chat.id)
 
 
@@ -116,7 +115,7 @@ def func(message: types.Message):
     user.email = message.text[:254]
     user.save()
     bot.send_message(message.chat.id,
-                     "Необходимо принять согласие об обработке персональных данных", reply_markup=conf_kb)
+                     "Необходимо принять *согласие об обработке персональных данных*", reply_markup=conf_kb, parse_mode="Markdown")
     bot.set_state(message.from_user.id, RegistrationStates.confirm, message.chat.id)
 
 
@@ -124,7 +123,7 @@ def func(message: types.Message):
 def func(call: types.CallbackQuery):
     bot.answer_callback_query(call.id)
     bot.send_message(call.message.chat.id,
-                     "Поздравляем! Теперь ты можешь следить за своими успехами в личном кабинете.\n\nА прямо сейчас ты можешь ознакомиться с нашими правилами.\n", reply_markup=rule_kb)
+                     "*Поздравляем!* 🎉 Теперь ты можешь следить за своими успехами в личном кабинете.\n\nА прямо сейчас ты можешь *ознакомиться с нашими правилами*.", reply_markup=rule_kb)
     bot.set_state(call.from_user.id, RegistrationStates.rules, call.message.chat.id)
 
 
@@ -137,8 +136,8 @@ def func(call: types.CallbackQuery):
 
 @bot.message_handler(commands=['start_quiz'])
 def func(message: types.Message):
-    text = "Ну все, мы начинаем!\n\nВыбери из списка музей, в котором ты сейчас находишься или в который собираешься  отправиться в первую очередь!"
-    bot.send_message(message.chat.id, text, reply_markup=museum_choice)
+    text = "Ну все, *мы начинаем*!\n\n➡️ *Выбери из списка музей*, в котором ты сейчас находишься или в который собираешься  отправиться в первую очередь!"
+    bot.send_message(message.chat.id, text, reply_markup=museum_choice, parse_mode="Markdown")
     bot.set_state(message.from_user.id, AnswerStates.waiting_museum, message.chat.id)
 
 
