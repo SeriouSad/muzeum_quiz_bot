@@ -31,3 +31,7 @@ class UserCategoryProgressionAdmin(admin.ModelAdmin):
 @admin.register(AnswerDescription)
 class UserCategoryProgressionAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(Rules)
+class RulesAdmin(admin.ModelAdmin):
+    pass
