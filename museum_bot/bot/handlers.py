@@ -20,9 +20,16 @@ def process_progress(user):
 
 def send_answer(question, message, correct):
     if question.answer_description.photo:
-        bot.send_photo(message.chat.id, question.answer_description.photo, caption=question.answer_description.text, reply_markup=next_kb)
+        if correct:
+            bot.send_photo(message.chat.id, question.answer_description.photo, caption=question.answer_description.text_correct, reply_markup=next_kb)
+        else:
+            bot.send_photo(message.chat.id, question.answer_description.photo,
+                           caption=question.answer_description.text, reply_markup=next_kb)
     else:
-        bot.send_message(message.chat.id, question.answer_description.text, reply_markup=next_kb)
+        if correct:
+            bot.send_message(message.chat.id, question.answer_description.text_correct, reply_markup=next_kb)
+        else:
+            bot.send_message(message.chat.id, question.answer_description.text, reply_markup=next_kb)
 
 
 def send_question(user, message):
