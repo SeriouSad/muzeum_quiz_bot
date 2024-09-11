@@ -103,3 +103,14 @@ class UserMuseumProgression(models.Model):
     class Meta:
         verbose_name_plural = 'Прогресс пользователей по музеям'
         verbose_name = "Прогресс пользователя"
+
+
+class Rules(models.Model):
+    text = models.TextField(verbose_name="Текст правил")
+
+    def __str__(self):
+        return "Правила"
+
+    class Meta:
+        verbose_name_plural = 'Правила'
+        verbose_name = "Правила"

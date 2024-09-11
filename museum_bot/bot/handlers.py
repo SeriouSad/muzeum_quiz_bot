@@ -52,7 +52,7 @@ def start(message: types.Message):
             tg_id=message.from_user.id,
             username=message.from_user.username,
         )
-    text = "Тут будет главный текст"
+    text = "Привет! Это проект «Город Героев Москва».\n\nПри поддержке Комитета общественных связей и молодежной политики города Москвы и Департамента культуры города Москвы.\n\nМы подготовили для тебя серию квестов по историческим музеям столицы. Чтобы принять участие нажми на кнопку «Начать»."
     bot.send_message(message.chat.id, text, reply_markup=reg_kb)
     bot.set_state(message.from_user.id, RegistrationStates.start, message.chat.id)
 
@@ -107,7 +107,7 @@ def func(call: types.CallbackQuery):
 
 @bot.message_handler(commands=['start_quiz'])
 def func(message: types.Message):
-    text = "Выберите музей"
+    text = "Ну все, мы начинаем!\n\nВыбери из списка музей, в котором ты сейчас находишься или в который собираешься  отправиться в первую очередь!"
     bot.send_message(message.chat.id, text, reply_markup=museum_choice)
     bot.set_state(message.from_user.id, AnswerStates.waiting_museum, message.chat.id)
 
@@ -156,7 +156,7 @@ def func(call: types.CallbackQuery):
         progress.questions_count += 1
         progress.hint_used = False
         progress.save()
-    elif question.hint is not None and not progress.hint_used:
+    elif question.hint and not progress.hint_used:
         bot.send_message(call.message.chat.id, f"К сожалению ответ неверный, но у меня есть подсказка\n\n{question.hint}")
         # TODO time.sleep(1)
         progress.hint_used = True
@@ -180,3 +180,16 @@ def func(call: types.CallbackQuery):
     user = TgUser.objects.get(tg_id=call.from_user.id)
     bot.set_state(call.from_user.id, AnswerStates.waiting_for_answer, call.message.chat.id)
     send_question(user, call.message)
+
+
+@bot.message_handler(commands=['rules'])
+def func(message: types.Message):
+    rules = Rules.objects.all().first()
+    bot.send_message(message.chat.id, rules.text, parse_mode='HTML')
+
+
+@bot.message_handler(commands=['account'])
+def func(message: types.Message):
+    user = TgUser.objects.get(tg_id=message.from_user.id)
+    text = f"ФИО: {user.fio}\nНомер телефона: {user.phone_number}\nПочта: {user.email}\nКоличество звезд: {user.points}⭐️"
+    bot.send_message(message.chat.id, text)
