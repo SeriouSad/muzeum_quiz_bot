@@ -41,12 +41,12 @@ def send_answer(question, message, correct):
 
 def send_question(user, message):
     if process_progress(user):
-        bot.send_message(message.chat.id, f"Вы успешно завершили этот тест, у вас сейчас {user.points}⭐️")
         if process_finish(user):
             bot.send_message(message.chat.id, "Поздравляем, ты прошел квест,  и справился со всеми заданиями. Чтобы узнать сколько у тебя звёзд, вызови команду /stars")
             bot.delete_state(user.tg_id, message.chat.id)
             return
-        bot.delete_state(user.tg_id, message.chat.id)
+        bot.send_message(message.chat.id, f"Вы успешно завершили этот тест, у вас сейчас {user.points}⭐️", reply_markup=museum_choice)
+        bot.set_state(user.tg_id, AnswerStates.waiting_museum, message.chat.id)
         return
     test_progression = UserMuseumProgression.objects.get(user=user, finished=False)
     question = Question.objects.filter(museum=test_progression.museum).order_by("order")[test_progression.questions_count]
