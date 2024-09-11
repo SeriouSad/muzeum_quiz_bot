@@ -35,3 +35,7 @@ class UserCategoryProgressionAdmin(admin.ModelAdmin):
 @admin.register(Rules)
 class RulesAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(SuperGameUser)
+class SpGameAdmin(admin.ModelAdmin):
+    pass

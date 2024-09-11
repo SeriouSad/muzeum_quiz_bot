@@ -114,3 +114,14 @@ class Rules(models.Model):
     class Meta:
         verbose_name_plural = 'Правила'
         verbose_name = "Правила"
+
+
+class SuperGameUser(models.Model):
+    user = models.ForeignKey(TgUser, on_delete=models.CASCADE, verbose_name="Пользователь")
+    question1 = models.BooleanField(verbose_name="На вопрос 1 ответил корректно?", default=False)
+    question2 = models.BooleanField(verbose_name="На вопрос 1 ответил корректно?", default=False)
+    question3 = models.BooleanField(verbose_name="На вопрос 1 ответил корректно?", default=False)
+    winner = models.BooleanField(verbose_name="Победил в супер-игре?", default=False)
+
+    def __str__(self):
+        return self.user.fio

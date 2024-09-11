@@ -10,6 +10,9 @@ from museum_bot.bot.keyboards import *
 from museum_bot.bot.states import *
 
 
+def process_finish(user):
+    return UserMuseumProgression.objects.filter(user=user, finished=True).count() >= 5
+
 def process_progress(user):
     test_progression = UserMuseumProgression.objects.get(user=user, finished=False)
     if test_progression.questions_count == 15:
@@ -35,6 +38,10 @@ def send_answer(question, message, correct):
 def send_question(user, message):
     if process_progress(user):
         bot.send_message(message.chat.id, f"Вы успешно завершили этот тест, у вас сейчас {user.points}⭐️")
+        if process_finish(user):
+            bot.send_message(message.chat.id, "Поздравляем, ты прошел квест,  и справился со всеми заданиями. Чтобы узнать сколько у тебя звёзд, вызови команду /stars")
+            bot.delete_state(user.tg_id, message.chat.id)
+            return
         bot.delete_state(user.tg_id, message.chat.id)
         return
     test_progression = UserMuseumProgression.objects.get(user=user, finished=False)
@@ -200,3 +207,47 @@ def func(message: types.Message):
     user = TgUser.objects.get(tg_id=message.from_user.id)
     text = f"ФИО: {user.fio}\nНомер телефона: {user.phone_number}\nПочта: {user.email}\nКоличество звезд: {user.points}⭐️"
     bot.send_message(message.chat.id, text)
+
+
+@bot.message_handler(commands=['stars'])
+def func(message: types.Message):
+    user = TgUser.objects.get(tg_id=message.from_user.id)
+    text = f"Всего звезд: {user.points}⭐️"
+    bot.send_message(message.chat.id, text)
+    if user.points < 300:
+        bot.send_message(message.chat.id, "Ты только посмотри сколько у тебя звёзд, все их можно обменять на стильный мерч вот здесь: ссылка")
+    else:
+        bot.send_message(message.chat.id, "Ура! У тебя рекордный результат! Так что предлагаем тебе принять участие в супер-игре, состоящей всего из трех вопросов. \n\nПобедители супер-игры будут участвовать в розыгрыше главного приза, который состоится ….. сентября. Обладатель приза будет определен с помощью генератора случайных чисел среди тех, кто правильно ответил на вопросы супер-игры.\n\nЕсли ты в игре, нажми на кнопку «В игре»")
+        bot.set_state(message.chat.id, SPstates.start, message.from_user.id)
+
+
+@bot.callback_query_handler(func=lambda call: True, state=SPstates.start)
+def func(call: types.CallbackQuery):
+    bot.answer_callback_query(call.id)
+    text = """А теперь, чтобы получить к ней доступ, тебе ниже надо написать цифровой шифр. В каждом музее, ответом на супер-вопрос была цифра. Подставь свои цифры в верной последовательности, чтобы они соответствовали музеям:\n\nГБУК г. Москвы «Музей-панорама "Бородинская битва"»\nГБУК г. Москвы «Мемориальный музей космонавтики»\nГБУК r. Москвы «Музей истории ГУЛАГа»\nГБУК г. Москвы «Музей археологии Москвы»\nГБУК г. Москвы «Государственный музей обороны Москвы»"""
+    bot.send_message(call.message.chat.id, text)
+    bot.set_state(call.from_user.id, SPstates.code, call.message.chat.id)
+
+
+@bot.message_handler(state=SPstates.code)
+def func(message: types.Message):
+    if message.text == "15122117":
+        bot.send_message(message.chat.id, "Что ж,  код подошел. Добро пожаловать в супер-игру!")
+    else:
+        bot.send_message(message.chat.id, "Нам жаль, но код не подходит! Попробуй еще раз расположить цифры в верной последовательности без пробелов.")
+
+
+@bot.callback_query_handler(func=lambda call: True, state=SPstates.start)
+def func(call: types.CallbackQuery):
+    bot.answer_callback_query(call.id)
+    bot.set_state(call.from_user.id, SPstates.question1, call.message.chat.id)
+    kb = InlineKeyboardMarkup()
+    kb.add(InlineKeyboardButton("Музей-панорама «Бородинская битва»", data=0))
+    kb.add(InlineKeyboardButton("Мемориальный музей космонавтики", data=0))
+    kb.add(InlineKeyboardButton("Музей истории ГУЛАГа", data=1))
+    kb.add(InlineKeyboardButton("Музей археологии Москвы", data=0))
+    kb.add(InlineKeyboardButton("Государственный музей обороны Москвы", data=0))
+
+    bot.send_message()
+
+

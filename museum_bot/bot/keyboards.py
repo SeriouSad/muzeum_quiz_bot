@@ -19,3 +19,7 @@ museum_choice = InlineKeyboardMarkup()
 museums = Museum.objects.all()
 for i in museums:
     museum_choice.add(InlineKeyboardButton(str(i.name), callback_data=str(i.id)))
+
+
+sp_game_kb = InlineKeyboardMarkup()
+sp_game_kb.add(InlineKeyboardButton("В игре", callback_data="sp"))
