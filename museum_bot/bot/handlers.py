@@ -18,7 +18,7 @@ def process_progress(user):
         return True
     return False
 
-def send_answer(question, message):
+def send_answer(question, message, correct):
     if question.answer_description.photo:
         bot.send_photo(message.chat.id, question.answer_description.photo, caption=question.answer_description.text, reply_markup=next_kb)
     else:
@@ -144,7 +144,7 @@ def func(call: types.CallbackQuery):
         user.points += 5
         user_answer.correct = True
         user_answer.save()
-        send_answer(question, call.message)
+        send_answer(question, call.message, True)
         progress.questions_count += 1
         progress.hint_used = False
         progress.save()
@@ -152,7 +152,7 @@ def func(call: types.CallbackQuery):
         user.points += 2
         user_answer.correct = True
         user_answer.save()
-        send_answer(question, call.message)
+        send_answer(question, call.message, True)
         progress.questions_count += 1
         progress.hint_used = False
         progress.save()
@@ -165,7 +165,7 @@ def func(call: types.CallbackQuery):
         return
     else:
         bot.send_message(call.message.chat.id, "К сожалению ответ неверный")
-        send_answer(question, call.message)
+        send_answer(question, call.message, False)
         progress.questions_count += 1
         progress.hint_used = False
         progress.save()

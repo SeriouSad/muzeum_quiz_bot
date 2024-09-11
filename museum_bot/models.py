@@ -31,8 +31,9 @@ class Museum(models.Model):
 
 
 class AnswerDescription(models.Model):
-    text = models.TextField(verbose_name="Текст правильного ответа")
+    text = models.TextField(verbose_name="Текст правильного ответа", blank=True)
     photo = models.ImageField(upload_to='staticfiles/questions/photo/', blank=True, verbose_name="Фото")
+    text_correct = models.TextField(verbose_name="Текст правильного ответа, если ответ верный", blank=True)
 
     def __str__(self):
         return self.text[:50]
