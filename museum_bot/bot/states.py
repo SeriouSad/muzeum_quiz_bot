@@ -5,7 +5,7 @@ class RegistrationStates(StatesGroup):
     start = State()
     fio = State()
     phone = State()
-    emai = State()
+    email = State()
     confirm = State()
 
 
@@ -14,5 +14,6 @@ class StartStates(StatesGroup):
 
 
 class AnswerStates(StatesGroup):
+    waiting_museum = State()
     waiting_for_answer = State()
     waiting_for_next_question = State()

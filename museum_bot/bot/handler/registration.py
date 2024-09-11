@@ -12,6 +12,7 @@ from museum_bot.bot.states import *
 def start(message: types.Message):
     try:
         TgUser.objects.get(tg_id=message.from_user.id)
+        bot.send_message(message.chat.id, "Вы уже зарегистрировались, вы можете приступить к квизу")
     except TgUser.DoesNotExist:
         TgUser.objects.create(
             tg_id=message.from_user.id,
@@ -33,11 +34,41 @@ def func(call: types.CallbackQuery):
 @bot.message_handler(state=RegistrationStates.fio)
 def func(message: types.Message):
     user = TgUser.objects.get(tg_id=message.from_user.id)
-    user.fio = message.text[:255]
+    user.fio = message.text[:254]
     user.save()
     keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=True)
     reg_button = types.KeyboardButton(text="Поделиться контактом", request_contact=True)
     keyboard.add(reg_button)
     bot.send_message(message.chat.id, "Отправьте свой номер телефона", reply_markup=keyboard)
     bot.set_state(message.from_user.id, RegistrationStates.phone, message.chat.id)
+
+
+@bot.message_handler(state=RegistrationStates.phone, content_types=['contact'])
+def func(message: types.Message):
+    user = TgUser.objects.get(tg_id=message.from_user.id)
+    user.phone = message.contact.phone_number
+    user.save()
+    bot.send_message(message.chat.id, "Введите свой email")
+    bot.set_state(message.from_user.id, RegistrationStates.email, message.chat.id)
+
+
+@bot.message_handler(state=RegistrationStates.email, content_types=['contact'])
+def func(message: types.Message):
+    user = TgUser.objects.get(tg_id=message.from_user.id)
+    user.email = message.text[:254]
+    user.save()
+    bot.send_message(message.chat.id,
+                     "Необходимо принять согласие об обработке персональных данных", reply_markup=conf_kb)
+    bot.set_state(message.from_user.id, RegistrationStates.confirm, message.chat.id)
+
+
+@bot.callback_query_handler(state=RegistrationStates.confirm)
+def func(call: types.CallbackQuery):
+    bot.answer_callback_query(call.id)
+    bot.send_message(call.message.chat.id, "Поздравляем! Теперь ты можешь следить за своими успехами в личном кабинете.\n\nА прямо сейчас ты можешь ознакомиться с нашими правилами.")
+    bot.delete_state(call.message.from_user.id, call.message.chat.id)
+
+
+
+
     

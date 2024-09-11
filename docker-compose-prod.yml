@@ -17,9 +17,9 @@
       volumes:
         - postgres_data:/var/lib/postgresql/data/
       environment:
-        POSTGRES_DB: msc_db
-        POSTGRES_USER: msc_bot
-        POSTGRES_PASSWORD: msc_bot
+        - POSTGRES_USER=museum_bot
+        - POSTGRES_PASSWORD=museum_bot
+        - POSTGRES_DB=museum_db
       ports:
         - "${DB_PORT:-1338}:5432"
     nginx:

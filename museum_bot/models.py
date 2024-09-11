@@ -1,3 +1,5 @@
+from email.policy import default
+
 from django.db import models
 
 
@@ -28,12 +30,24 @@ class Museum(models.Model):
         verbose_name = "Музей"
 
 
+class AnswerDescription(models.Model):
+    text = models.TextField(verbose_name="Текст правильного ответа")
+    photo = models.ImageField(upload_to='staticfiles/questions/photo/', blank=True, verbose_name="Фото")
+
+    def __str__(self):
+        return self.text[:50]
+
+    class Meta:
+        verbose_name_plural = 'Комментарии к ответам'
+        verbose_name = "Комментарий к ответам"
+
 class Question(models.Model):
     museum = models.ForeignKey(Museum, on_delete=models.CASCADE, verbose_name="Музей")
     text = models.TextField(blank=True, verbose_name="Текст вопроса")
     photo = models.ImageField(upload_to='staticfiles/questions/photo/', blank=True, verbose_name="Фото")
     hint = models.TextField(verbose_name="Подсказка", blank=True)
     order = models.IntegerField(verbose_name="Порядковый номер", blank=True, default=None, null=True)
+    answer_description = models.ForeignKey(AnswerDescription, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Комментарий к ответам")
 
 
     def save(self, *args, **kwargs):
@@ -80,6 +94,7 @@ class UserMuseumProgression(models.Model):
     museum = models.ForeignKey(Museum, on_delete=models.CASCADE, verbose_name="Музей")
     questions_count = models.IntegerField(default=0, verbose_name="Количество отвеченных вопросов")
     finished = models.BooleanField(default=False, verbose_name="Закончен?")
+    hint_used = models.BooleanField(default=False, verbose_name="Использована подсказка?")
 
     def __str__(self):
         return f"{self.user.username} - {self.museum.name}"
