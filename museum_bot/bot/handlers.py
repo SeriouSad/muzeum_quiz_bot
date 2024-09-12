@@ -222,6 +222,26 @@ def func(message: types.Message):
     bot.send_message(message.chat.id, rules.text, parse_mode='HTML')
 
 
+
+@bot.message_handler(commands=['prize'])
+def func(message: types.Message):
+    a = """
+    Результаты розыгрыша главного приза ты можешь узнать <a href="https://t.me/gorodgeroevmsk">здесь</a> 13 октября 2024 года.
+Весь мерч будет доступен https://t.me/gorodgeroevmsk с 13 октября
+Чтобы обменять свои звезды на призы, тебе необходимо написать нашему администратору (команда, которая открывает чат с поддержкой)
+При выборе призов, учитывай свое количество баллов. 
+Для того чтобы получить приз тебе необходимо написать а чат следующее:
+ 1 Свой номер телефона
+ 2 Номера выбранных призов 
+ 3 Сумму звезд, которую ты на них тратишь. 
+ 4 Самовывоз или доставка 
+ 5 Адрес доставки 
+
+* самовывоз осуществляется по адресу.
+    """
+    bot.send_message(message.chat.id, a, parse_mode='HTML')
+
+
 @bot.message_handler(commands=['account'])
 def func(message: types.Message):
     user = TgUser.objects.get(tg_id=message.from_user.id)
