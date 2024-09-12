@@ -30,3 +30,34 @@ rule_kb.add(InlineKeyboardButton("Посмотреть правила", callback
 
 res_kb = InlineKeyboardMarkup()
 res_kb.add(InlineKeyboardButton("Посмотреть результат", callback_data="rules"))
+
+question_kb1 = InlineKeyboardMarkup()
+question_kb1.add(InlineKeyboardButton("Музей-панорама «Бородинская битва»", callback_data="0"))
+question_kb1.add(InlineKeyboardButton("Мемориальный музей космонавтики", callback_data="1"))
+question_kb1.add(InlineKeyboardButton("Музей истории ГУЛАГа", callback_data="0"))
+question_kb1.add(InlineKeyboardButton("Музей археологии Москвы", callback_data="0"))
+question_kb1.add(InlineKeyboardButton("Государственный музей обороны Москвы", callback_data="0"))
+
+
+question_kb2 = InlineKeyboardMarkup()
+question_kb2.add(InlineKeyboardButton("Музей-панорама «Бородинская битва»", callback_data="0"))
+question_kb2.add(InlineKeyboardButton("Мемориальный музей космонавтики", callback_data="0"))
+question_kb2.add(InlineKeyboardButton("Музей истории ГУЛАГа", callback_data="1"))
+question_kb2.add(InlineKeyboardButton("Музей археологии Москвы", callback_data="0"))
+question_kb2.add(InlineKeyboardButton("Государственный музей обороны Москвы", callback_data="0"))
+
+question_kb3 = InlineKeyboardMarkup()
+question_kb3.add(InlineKeyboardButton("Музей-панорама «Бородинская битва»", callback_data="0"))
+question_kb3.add(InlineKeyboardButton("Мемориальный музей космонавтики", callback_data="0"))
+question_kb3.add(InlineKeyboardButton("Музей истории ГУЛАГа", callback_data="0"))
+question_kb3.add(InlineKeyboardButton("Музей археологии Москвы", callback_data="1"))
+question_kb3.add(InlineKeyboardButton("Государственный музей обороны Москвы", callback_data="0"))
+
+
+mes_kb = InlineKeyboardMarkup()
+mes_kb.add(InlineKeyboardButton("Написать администратору", callback_data="asd", url="https://vk.com/im?media=&sel=-222920535"))
+
+sp_kb = InlineKeyboardMarkup()
+sp_kb.add(InlineKeyboardButton("Начать супер-игру", callback_data='asd'))
+
+

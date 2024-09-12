@@ -23,6 +23,7 @@ class AnswerStates(StatesGroup):
 class SPstates(StatesGroup):
     start = State()
     code = State()
+    start2 = State()
     question1 = State()
     question2 = State()
     question3 = State()
