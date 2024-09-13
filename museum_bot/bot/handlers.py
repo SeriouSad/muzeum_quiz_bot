@@ -149,7 +149,14 @@ def func(message: types.Message):
 @bot.callback_query_handler(func=lambda call: True, state=AnswerStates.waiting_museum)
 def func(call: types.CallbackQuery):
     bot.answer_callback_query(call.id)
-    user = TgUser.objects.get(tg_id=call.from_user.id)
+    try:
+        user = TgUser.objects.get(tg_id=call.from_user.id)
+        # bot.send_message(message.chat.id, "Вы уже зарегистрировались, вы можете приступить к квизу")
+    except TgUser.DoesNotExist:
+        user = TgUser.objects.create(
+            tg_id=call.from_user.id,
+            username=call.from_user.username,
+        )
     try:
         progress = UserMuseumProgression.objects.get(user=user, museum_id=int(call.data))
         if progress.finished:
