@@ -4,7 +4,7 @@ from django.db import models
 
 
 class TgUser(models.Model):
-    tg_id = models.IntegerField(verbose_name="Id пользователя в telegram")
+    tg_id = models.CharField(verbose_name="Id пользователя в telegram", max_length=255)
     username = models.CharField(max_length=255, verbose_name="Никнейм")
     fio = models.CharField(max_length=255, verbose_name="ФИО")
     phone_number = models.CharField(max_length=255, verbose_name="Номер телефона")
