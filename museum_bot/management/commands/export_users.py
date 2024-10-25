@@ -1,6 +1,6 @@
 import pandas as pd
 from django.core.management.base import BaseCommand
-from myapp.models import TgUser, SuperGameUser
+from museum_bot.models import TgUser, SuperGameUser
 
 
 class Command(BaseCommand):
